@@ -1,0 +1,83 @@
+{
+    "location": {
+        "url": "https://jenkins.example.com",
+        "adminAdress": "Jenkins CI <jenkins@example.com>"
+    },
+    "git": {
+        "name": "Jenkins CI",
+        "email": "jenkins@example.com"
+    },
+    "java": {
+        "name": "Java 8",
+        "javaHome": "/usr/lib/jvm/java-8-oracle"
+    },
+    "maven": {
+        "name": "Maven",
+        "mavenHome": "/usr/local/apache-maven-3.5.0"
+    },
+    "mavenSettings": {
+        "id": "maven-settings",
+        "name": "Maven Settings",
+        "settingsFile": "settings.xml",
+        "credentialMappings": {
+            "central": "artifactory-deployer",
+            "snapshots": "artifactory-deployer"
+        }
+    },
+    "timestamper": {
+        "systemTimeFormat": "'<b>'yyyy-MM-dd HH:mm:ss.SSS'</b> '",
+        "elapsedTimeFormat": "'<b>'HH:mm:ss.S'</b> '"
+    },
+    "shell": "/bin/bash",
+    "slave": {
+        "name": "build-node",
+        "description": "Build Node",
+        "remoteRootDir": "/home/jenkins",
+        "numExecutors": "4",
+        "hostName": "jenkins_slave",
+        "sshKeyId": "build-slave-user"
+    },
+    "credentials": {
+        "build-slave-user": {
+            "type": "USERNAME_PASSWORD",
+            "description": "User to connect to the Build Slave",
+            "username": "jenkins",
+            "password": "jenkins"
+        },
+        "artifactory-api-key": {
+            "type": "SECRET_TEXT",
+            "description": "Artifactory ci-deployer API key",
+            "secretFile": "artifactory.key"
+        },
+        "jenkins-ssh-key": {
+            "type": "SSH_KEY",
+            "description": "Jenkins SSH key",
+            "username": "jenkins",
+            "privateKeyFile": "id_rsa_sample"
+        },
+        "hipchat-api-token": {
+            "type": "SECRET_TEXT",
+            "description": "HipChat API Token",
+            "secretFile": "hipchat.token"
+        }
+    },
+    "security": {
+        "enabled": true,
+        "initialUser": {
+            "name": "admin",
+            "password": "s3cr3t"
+        }
+    },
+    "hipChatNotifier": {
+        "server": "api.hipchat.com",
+        "credentialId": "hipchat-api-token",
+        "room": "CI",
+        "sendAs": "Jenkins"
+    },
+    "sonarQube": {
+        "url": "http://sonarqube.example.com:9000"
+    },
+    "seedJob": {
+        "jobDslFile": "jobDsl.groovy"
+    }
+}

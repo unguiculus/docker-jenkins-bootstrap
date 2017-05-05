@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+
+set -e
+
+scriptdir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+pushd $scriptdir > /dev/null
+
+detached=
+
+show_help() {
+cat << EOF
+Usage: ${0##*/} (start|stop|restart|destroy|build) [<options>]
+    -h, --help             Display help
+    -d, --detached         Detached mode: Run Jenkins in the background
+    -i, --init             Copy init scripts so they are run during Jenkins startup
+EOF
+}
+
+function copy_bootstrap_files() {
+    echo 'Copying bootstrap files...'
+    local target_dir=./data/bootstrap/
+    mkdir -p "$target_dir"
+    cp -f ./bootstrap/* "$target_dir"
+}
+
+function start() {
+    echo 'Starting up Jenkins...'
+    docker-compose up $detached
+}
+
+function stop() {
+    echo 'Stopping Jenkins...'
+    docker-compose stop
+}
+
+function restart() {
+    echo 'Restarting Jenkins...'
+    stop
+    start
+}
+
+function destroy() {
+    echo 'Destroying Jenkins...'
+    docker-compose kill
+    docker-compose rm -f
+}
+
+function build() {
+    echo 'Building Jenkins images...'
+
+    . ./build.properties
+
+    echo "JENKINS_MASTER_VERSION: $JENKINS_MASTER_VERSION"
+    echo "JENKINS_SLAVE_VERSION: $JENKINS_SLAVE_VERSION"
+    echo "JENKINS_HOST: $JENKINS_HOST"
+    echo "LETSENCRYPT_EMAIL: $LETSENCRYPT_EMAIL"
+
+    echo 'Generating docker-compose.yml from template: ./templates/docker-compose.yml'
+
+    sed "s/@JENKINS_MASTER_VERSION@/$JENKINS_MASTER_VERSION/g" ./templates/docker-compose.yml \
+        | sed "s/@JENKINS_SLAVE_VERSION@/$JENKINS_SLAVE_VERSION/g" \
+        | sed "s/@JENKINS_HOST@/$JENKINS_HOST/g" \
+        | sed "s/@LETSENCRYPT_EMAIL@/$LETSENCRYPT_EMAIL/g" \
+        > docker-compose.yml
+
+    echo 'Generating jenkins_master/Dockerfile from template: ./templates/Dockerfile'
+
+    sed "s/@JENKINS_MASTER_VERSION@/$JENKINS_MASTER_VERSION/g" ./templates/Dockerfile > jenkins_master/Dockerfile
+
+    docker-compose build
+}
+
+while :; do
+    case $1 in
+        -h|--help)
+            show_help
+            exit
+            ;;
+        -i|--init)
+            init=true
+            ;;
+        -d|--detached)
+            detached='-d'
+            ;;
+        start|stop|restart|destroy|build)
+            if [[ -n "$command" ]]; then
+                printf 'ERROR: Cannot specify multiple commands. Command already set: %s\n' "$command" >&2
+                exit 1
+            fi
+            command="$1"
+            ;;
+        -?*)
+            printf 'WARN: Unknown option (ignored): %s\n' "$1" >&2
+            ;;
+        *)
+            break
+            ;;
+    esac
+
+    shift
+done
+
+[[ -z "$command" ]] && show_help
+[[ -n "$init" ]] && copy_bootstrap_files
+
+$command
+
+popd > /dev/null

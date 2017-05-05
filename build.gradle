@@ -1,0 +1,40 @@
+/*
+ * Gradle script only necessary to achieve code completion etc. in Groovy scripts for Jenkins
+ */
+
+apply plugin: 'groovy'
+
+repositories {
+    jcenter()
+    maven {
+        url 'http://repo.jenkins-ci.org/releases/'
+    }
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs 'docker/jenkins_master/init'
+            srcDirs 'docker/bootstrap'
+        }
+    }
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.7'
+    compile 'org.jenkins-ci.main:jenkins-war:2.46.1'
+    compile 'org.jenkins-ci.plugins:timestamper:1.8.8@jar'
+    compile 'org.jenkins-ci.plugins:credentials:2.1.13@jar'
+    compile 'org.jenkins-ci.plugins:ssh-credentials:1.13@jar'
+    compile 'org.jenkins-ci.plugins:ssh-slaves:1.17@jar'
+    compile 'org.jenkins-ci.plugins:plain-credentials:1.4@jar'
+    compile 'org.jenkins-ci.plugins:config-file-provider:2.15.7@jar'
+    compile 'org.jenkins-ci.plugins:git:3.3.0@jar'
+    compile 'org.jenkins-ci.plugins:sonar:2.6.1@jar'
+    compile 'org.jenkins-ci.plugins:crowd2:1.8@jar'
+    compile 'org.jenkins-ci.plugins:job-dsl-core:1.61'
+    compile 'org.jenkins-ci.plugins:job-dsl:1.61@jar'
+    compile 'org.jenkins-ci.plugins:antisamy-markup-formatter:1.5@jar'
+    compile 'org.jvnet.hudson.plugins:hipchat:2.1.1@jar'
+    compile 'org.jvnet.hudson.plugins:locale:1.2@jar'
+}
