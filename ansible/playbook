@@ -1,0 +1,13 @@
+#!/usr/bin/env bash -e
+
+scriptdir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+pushd $scriptdir > /dev/null
+
+ansible-galaxy install -r requirements.yml
+
+jenkins_ip=$(../terraform/tf output -no-color ip_address)
+
+# we need an increased timeout, the droplet might not be completely ready yet
+ansible-playbook main.yml -i hosts --extra-vars "jenkins_ip=$jenkins_ip"
+
+popd > /dev/null

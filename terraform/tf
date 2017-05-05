@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+set -e
+
+show_help() {
+cat << EOF
+Usage: ${0##*/} <options> <terraform args>
+    -h, --help             Display help
+    -v, --verbose          Display verbose output
+    -i, --init             Run 'terraform init' before executing the actual command
+    --                     End of all options
+EOF
+}
+
+scriptdir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+pushd $scriptdir > /dev/null
+
+init=
+
+while :; do
+    case $1 in
+        -h|--help)
+            show_help
+            exit
+            ;;
+        -v|--verbose)
+            verbose=true
+            ;;
+        -i|--init)
+            init=true
+            ;;
+        --) # End of all options.
+            shift
+            break
+            ;;
+        -?*)
+            printf 'WARN: Unknown option (ignored): %s\n' "$1" >&2
+            ;;
+        *)
+            break
+            ;;
+    esac
+
+    shift
+done
+
+[[ -n "$verbose" ]] && set -x
+
+export TF_VAR_region="fra1"
+
+# search account.json up to project root
+path=$(pwd)
+while :; do
+    token="$path/digitalocean.token"
+    if [[ -f "$token" ]]; then
+        export TF_VAR_do_token=$(cat "$token")
+        break
+    elif [[ -d "$path/.git" ]]; then
+        echo "'digitalocean.token' not found in hierarchy" >&2
+        exit 1
+    fi
+    path=${path%/*}
+done
+
+[[ -n $init ]] && terraform init
+
+terraform "$@"
+
+popd > /dev/null

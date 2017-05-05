@@ -1,0 +1,16 @@
+- name: Install basic stuff
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  with_items:
+    - apt-show-versions
+    - htop
+    - jq
+    - openssl
+    - python-pip
+    - python-dev
+    - libssl-dev
+
+- name: Install PyCrypto
+  pip:
+    name: cryptography

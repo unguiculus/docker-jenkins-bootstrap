@@ -1,0 +1,12 @@
+.idea
+.asciidoctor
+.DS_Store
+/docker/data/master
+/docker/data/slave
+/docker/data/bootstrap
+/docker/docker-compose.yml
+/docker/jenkins_master/Dockerfile
+/docker/bootstrap/*
+!/docker/bootstrap/JenkinsBootstrapper.groovy
+terraform.tfstate*
+digitalocean.token

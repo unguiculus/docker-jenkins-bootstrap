@@ -1,0 +1,1 @@
+jenkins ansible_host="{{ jenkins_ip }}"

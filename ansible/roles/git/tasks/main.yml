@@ -1,0 +1,16 @@
+- name: Add Github host key
+  become: yes
+  become_user: jenkins
+  lineinfile:
+    dest: "{{ jenkins_user_home }}/.ssh/known_hosts"
+    create: yes
+    state: present
+    line: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
+    regexp: "^github\\.com"
+
+- name: Clone docker-jenkins repo
+  become: yes
+  become_user: jenkins
+  git:
+    dest: "{{ jenkins_user_home }}/docker-jenkins-bootstrap"
+    repo: "{{ git_repo }}"
