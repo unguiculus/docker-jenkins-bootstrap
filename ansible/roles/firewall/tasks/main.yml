@@ -11,7 +11,7 @@
 - name: Deny all incoming
   ufw:
     policy: deny
-    direction: outgoing
+    direction: incoming
 
 - name: Allow TCP ports 22, 80, 443
   ufw:
@@ -22,3 +22,7 @@
     - 22
     - 80
     - 443
+
+- name: Reload UFW
+  ufw:
+    state: reloaded
