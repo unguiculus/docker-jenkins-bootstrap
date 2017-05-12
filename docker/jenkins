@@ -9,14 +9,14 @@ detached=
 
 show_help() {
 cat << EOF
-Usage: ${0##*/} (start|stop|restart|destroy|build) [<options>]
+Usage: ${0##*/} (start|stop|restart|destroy|build|bootstrap) [<options>]
     -h, --help             Display help
     -d, --detached         Detached mode: Run Jenkins in the background
     -i, --init             Copy init scripts so they are run during Jenkins startup
 EOF
 }
 
-function copy_bootstrap_files() {
+function bootstrap() {
     echo 'Copying bootstrap files...'
     local target_dir=./data/bootstrap/
     mkdir -p "$target_dir"
@@ -82,7 +82,7 @@ while :; do
         -d|--detached)
             detached='-d'
             ;;
-        start|stop|restart|destroy|build)
+        start|stop|restart|destroy|build|bootstrap)
             if [[ -n "$command" ]]; then
                 printf 'ERROR: Cannot specify multiple commands. Command already set: %s\n' "$command" >&2
                 exit 1
@@ -101,7 +101,6 @@ while :; do
 done
 
 [[ -z "$command" ]] && show_help
-[[ -n "$init" ]] && copy_bootstrap_files
 
 $command
 

@@ -2,7 +2,7 @@
 - name: Copy config files
   copy:
     src: files/
-    dest: "{{ jenkins_user_home }}/docker-jenkins-bootstrap"
-    owner: ubuntu
-    group: ubuntu
+    dest: "{{ jenkins_user_home }}/docker-jenkins-bootstrap/docker/bootstrap"
+    owner: jenkins
+    group: jenkins
     mode: 0600

@@ -23,6 +23,9 @@
     - role: basic_stuff
       tags:
         - basic
+    - role: firewall
+      tags:
+        - firewall
     - role: jenkins_user
       tags:
         - user
