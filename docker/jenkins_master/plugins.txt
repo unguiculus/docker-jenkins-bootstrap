@@ -35,6 +35,7 @@ htmlpublisher
 javadoc
 job-dsl
 jobConfigHistory
+lockable-resources
 locale
 mailer
 mask-passwords

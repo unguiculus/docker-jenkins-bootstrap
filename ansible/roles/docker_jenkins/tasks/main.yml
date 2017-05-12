@@ -1,3 +1,4 @@
+---
 - name: Add Github host key
   become: yes
   become_user: jenkins
@@ -14,3 +15,4 @@
   git:
     dest: "{{ jenkins_user_home }}/docker-jenkins-bootstrap"
     repo: "{{ git_repo }}"
+    version: "{{ branch }}"

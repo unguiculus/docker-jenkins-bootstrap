@@ -11,3 +11,4 @@
 !/docker/bootstrap/JenkinsBootstrapper.groovy
 terraform.tfstate*
 digitalocean.token
+/ansible/*.retry

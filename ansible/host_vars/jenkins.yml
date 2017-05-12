@@ -1,2 +1,4 @@
+---
 jenkins_user_home: /home/jenkins
 git_repo: https://github.com/unguiculus/docker-jenkins-bootstrap.git
+branch: master

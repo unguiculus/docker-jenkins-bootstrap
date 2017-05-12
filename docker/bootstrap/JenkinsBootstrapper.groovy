@@ -1,4 +1,5 @@
 import com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey
+import com.cloudbees.plugins.credentials.CredentialsProvider
 import com.cloudbees.plugins.credentials.CredentialsScope
 import com.cloudbees.plugins.credentials.CredentialsStore
 import com.cloudbees.plugins.credentials.SecretBytes
@@ -16,6 +17,7 @@ import hudson.plugins.sonar.SonarInstallation
 import hudson.plugins.sshslaves.SSHLauncher
 import hudson.plugins.sshslaves.verifiers.NonVerifyingKeyVerificationStrategy
 import hudson.plugins.timestamper.TimestamperConfig
+import hudson.security.ACL
 import hudson.security.FullControlOnceLoggedInAuthorizationStrategy
 import hudson.security.HudsonPrivateSecurityRealm
 import hudson.security.csrf.DefaultCrumbIssuer
@@ -160,10 +162,13 @@ class JenkinsBootstrapper {
                         config.username, config.password)
                     break
                 case 'SECRET_TEXT':
-                    String fileName = config.secretFile
-                    String secretFile = bootstrapDir.resolve(fileName).getText(StandardCharsets.UTF_8.name())
+                    String secretText = config.secretText
+                    if (!secretText) {
+                        String fileName = config.secretFile
+                        secretText = bootstrapDir.resolve(fileName).getText(StandardCharsets.UTF_8.name())
+                    }
                     cred = new StringCredentialsImpl(CredentialsScope.GLOBAL, id, config.description,
-                        Secret.fromString(secretFile))
+                        Secret.fromString(secretText))
                     break
                 case 'SECRET_FILE':
                     String fileName = config.secretFile
@@ -175,7 +180,14 @@ class JenkinsBootstrapper {
                     throw new IllegalStateException("Unknown credentials type: ${config.type}")
             }
 
-            credentialsStore.addCredentials(Domain.global(), cred)
+            def creds = CredentialsProvider.lookupCredentials(cred.class, Jenkins.getInstance(), ACL.SYSTEM, [])
+            def oldCred = creds.findResult { it.id == cred.id ? it : null }
+
+            if (oldCred) {
+                credentialsStore.updateCredentials(Domain.global(), oldCred, cred)
+            } else {
+                credentialsStore.addCredentials(Domain.global(), cred)
+            }
         }
 
         credentialsStore.save()
@@ -201,7 +213,7 @@ class JenkinsBootstrapper {
         instance.save()
     }
 
-    private configureLocation(String url, String adminAddress) {
+    private def configureLocation(String url, String adminAddress) {
         println 'Configuring location...'
 
         def locationConfig = JenkinsLocationConfiguration.get()
@@ -233,6 +245,8 @@ class JenkinsBootstrapper {
         allConfigs.get(UpdateSiteWarningsConfiguration).configure(null, json)
 
         CLI.get().setEnabled(false)
+
+        GlobalConfiguration.all().get(GlobalJobDslSecurityConfiguration.class).configure(null, new JSONObject())
 
         instance.save()
     }
@@ -283,7 +297,7 @@ class JenkinsBootstrapper {
 
         def instance = Jenkins.getInstance()
         def mavenTask = instance.getDescriptorByType(Maven.DescriptorImpl)
-        mavenTask.setInstallations(new Maven.MavenInstallation("Maven", mavenHome, []))
+        mavenTask.setInstallations(new Maven.MavenInstallation(name, mavenHome, []))
         mavenTask.save()
     }
 

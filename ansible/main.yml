@@ -21,8 +21,19 @@
 
   roles:
     - role: basic_stuff
+      tags:
+        - basic
     - role: jenkins_user
+      tags:
+        - user
     - role: angstwad.docker_ubuntu
+      tags:
+        - docker
       docker_group_members:
         - jenkins
-    - role: git
+    - role: docker_jenkins
+      tags:
+        - jenkins
+    - role: jenkins_bootstrap_config
+      tags:
+        - config

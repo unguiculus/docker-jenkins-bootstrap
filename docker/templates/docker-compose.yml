@@ -72,7 +72,7 @@ services:
     networks:
       - jenkinsnet
     volumes:
-      - ./data/master:/var/jenkins_home
+      - data_master:/var/jenkins_home
       - ./data/bootstrap:/etc/jenkins_bootstrap
     ports:
       - "8080:8080"
@@ -99,7 +99,7 @@ services:
       - jenkins_master
     restart: unless-stopped
     volumes:
-      - ./data/slave:/home/jenkins/workspace
+      - data_slave:/home/jenkins/workspace
       - $HOME/.gitconfig:/home/jenkins/.gitconfig
       - /var/run/docker.sock:/var/run/docker.sock
     logging:
@@ -112,6 +112,8 @@ volumes:
   vhost:
   html:
   certs:
+  data_master:
+  data_slave:
 
 networks:
   jenkinsnet:
