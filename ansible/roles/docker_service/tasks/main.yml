@@ -1,0 +1,20 @@
+---
+- name: Create Docker network
+  docker_network:
+    name: ci-net
+    state: present
+
+- name: "Run Docker service"
+  docker_service:
+    project_src: "{{ repo_dir }}/docker/{{ item }}"
+    timeout: 300
+    state: present
+    restarted: true
+  with_items:
+    - jenkins
+    - nginx
+
+- name: Remove unencrypted config files
+  become: yes
+  become_user: jenkins
+  shell: "find {{ repo_dir }}/docker/jenkins/bootstrap/ -not -name bootstrap -not -name JenkinsBootstrapper.groovy -delete"

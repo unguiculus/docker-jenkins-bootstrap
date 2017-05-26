@@ -1,1 +1,1 @@
-jenkins ansible_host="{{ jenkins_ip }}"
+jenkins ansible_host="{{ ci_ip }}"

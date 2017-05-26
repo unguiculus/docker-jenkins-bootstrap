@@ -4,13 +4,13 @@
   gather_facts: False
 
   vars_prompt:
-    - name: jenkins_ip
+    - name: ci_ip
       prompt: "Enter IP address of Jenkins host"
 
   tasks:
     - name: Set IP as fact
       set_fact:
-        jenkins_ip: "{{ jenkins_ip }}"
+        jenkins_ip: "{{ ci_ip }}"
     - name: Install Python
       raw: "apt-get update && apt-get -y -q install python"
 
@@ -23,20 +23,25 @@
     - role: basic_stuff
       tags:
         - basic
+
     - role: firewall
       tags:
         - firewall
+
     - role: jenkins_user
       tags:
         - user
+
     - role: angstwad.docker_ubuntu
-      tags:
-        - docker
       docker_group_members:
         - jenkins
-    - role: docker_jenkins
       tags:
-        - jenkins
-    - role: jenkins_bootstrap_config
+        - docker
+
+    - role: docker_config
       tags:
         - config
+
+    - role: docker_service
+      tags:
+        - service

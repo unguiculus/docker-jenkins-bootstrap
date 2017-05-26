@@ -1,0 +1,134 @@
+#!/usr/bin/env bash
+
+set -e
+
+directories=(nginx jenkins)
+
+function show_help() {
+    cat << EOF
+Usage: ${0##*/} (start|stop|restart|destroy|pull|build|init) [<directory>] [<args>]
+    -h, --help             Display help
+EOF
+}
+
+function parse_cmd_args() {
+    local args=()
+
+    while :; do
+        case $1 in
+            --)
+                shift
+                break
+                ;;
+            *)
+                args=("${args[@]} $1")
+                ;;
+        esac
+
+        shift
+    done
+}
+
+function compose() {
+    local args=()
+
+    while :; do
+        case $1 in
+            --)
+                shift
+                break
+                ;;
+            *)
+                args=("${args[@]}" "$1")
+                ;;
+        esac
+
+        shift
+    done
+
+    local dir="$1"
+    pushd "$dir" > /dev/null
+
+    echo "[$dir] Running command: docker-compose ${args[@]} ${@:2}"
+    docker-compose "${args[@]}" "${@:2}"
+
+    popd > /dev/null
+}
+
+function build() {
+    local dir="$1"
+
+    if [[ -f "$dir/build.sh" ]]; then
+        echo "Building Docker images..."
+        "$dir/build.sh"
+    fi
+
+    compose "build" "--" "$@"
+}
+
+function init() {
+    local dir="$1"
+
+    if [[ -f "$dir/init.sh" ]]; then
+        echo "Initializing..."
+        "$dir/init.sh"
+    fi
+}
+
+function up() {
+    compose "up" "-d" "--" "$@"
+}
+
+function start() {
+    compose "start" "--" "$@"
+}
+
+function stop() {
+    compose "stop" "--" "$@"
+}
+
+function restart() {
+    compose "restart" "--" "$@"
+}
+
+function pull() {
+    compose "pull" "--" "$@"
+}
+
+function destroy() {
+    compose "kill" "--" "$@"
+    compose "rm" "-f" "--" "$@"
+
+    docker network rm ci-net
+}
+
+function main() {
+    local scriptdir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+    pushd $scriptdir > /dev/null
+
+    local dirs
+    if [[ " ${directories[@]} " =~ " $1 " ]]; then
+        dirs=("$1")
+        shift
+    else
+        dirs=("${directories[@]}")
+    fi
+
+    local command="$1"
+    if [[ -z "$command" ]]; then
+        show_help
+        exit 1
+    fi
+
+    if ! (docker network ls | grep 'ci-net' > /dev/null); then
+        docker network create ci-net
+    fi
+
+    for dir in "${dirs[@]}"; do
+        "$command" "$dir" "${@:2}"
+    done
+
+    popd > /dev/null
+}
+
+main "$@"

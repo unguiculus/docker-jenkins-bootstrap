@@ -43,7 +43,6 @@ multiple-scms
 next-build-number
 pam-auth
 parameterized-trigger
-pipeline-classpath
 pipeline-maven
 pipeline-utility-steps
 plain-credentials

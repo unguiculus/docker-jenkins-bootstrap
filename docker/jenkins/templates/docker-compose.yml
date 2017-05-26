@@ -1,0 +1,52 @@
+version: '3.1'
+
+services:
+  jenkins_master:
+    build: ./jenkins_master
+    image: unguiculus/jenkins-master:@JENKINS_MASTER_VERSION@
+    container_name: jenkins-master
+    networks:
+      - ci-net
+    volumes:
+      - data_master:/var/jenkins_home
+      - ./data/bootstrap:/etc/jenkins_bootstrap
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    environment:
+      JAVA_OPTS: -Djava.security.egd=file:/dev/./urandom
+      VIRTUAL_HOST: @JENKINS_HOST@
+      VIRTUAL_PORT: 8080
+      LETSENCRYPT_HOST: @JENKINS_HOST@
+      LETSENCRYPT_EMAIL: @LETSENCRYPT_EMAIL@
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "30"
+
+  jenkins_slave:
+    build: ./jenkins_slave
+    image: unguiculus/jenkins-slave:@JENKINS_SLAVE_VERSION@
+    container_name: jenkins-slave
+    networks:
+      - ci-net
+    depends_on:
+      - jenkins_master
+    restart: unless-stopped
+    volumes:
+      - data_slave:/home/jenkins/workspace
+      - $HOME/.gitconfig:/home/jenkins/.gitconfig
+      - /var/run/docker.sock:/var/run/docker.sock
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "30"
+
+volumes:
+  data_master:
+  data_slave:
+
+networks:
+  ci-net:
+    external: true

@@ -1,11 +1,11 @@
-version: '3'
+version: '3.1'
 
 services:
   nginx:
     image: nginx:1.12
     container_name: nginx-proxy
     networks:
-      - jenkinsnet
+      - ci-net
     ports:
       - "80:80"
       - "443:443"
@@ -26,7 +26,7 @@ services:
     image: jwilder/docker-gen:0.7.3
     container_name: nginx-proxy-gen
     networks:
-      - jenkinsnet
+      - ci-net
     depends_on:
       - nginx
     command: -notify-sighup nginx-proxy -watch -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
@@ -36,7 +36,7 @@ services:
       - html:/usr/share/nginx/html
       - certs:/etc/nginx/certs:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./data/proxy/templates/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro
+      - ./data/docker-gen/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro
     restart: unless-stopped
     logging:
       options:
@@ -44,10 +44,10 @@ services:
         max-file: "30"
 
   letsencrypt:
-    image: jrcs/letsencrypt-nginx-proxy-companion:latest
+    image: jrcs/letsencrypt-nginx-proxy-companion:v1.5
     container_name: nginx-proxy-le
     networks:
-      - jenkinsnet
+      - ci-net
     depends_on:
       - nginx
       - dockergen
@@ -65,56 +65,13 @@ services:
         max-size: "10m"
         max-file: "30"
 
-  jenkins_master:
-    build: ./jenkins_master
-    image: unguiculus/jenkins-master:@JENKINS_MASTER_VERSION@
-    container_name: jenkins-master
-    networks:
-      - jenkinsnet
-    volumes:
-      - data_master:/var/jenkins_home
-      - ./data/bootstrap:/etc/jenkins_bootstrap
-    ports:
-      - "8080:8080"
-      - "50000:50000"
-    environment:
-      JAVA_OPTS: -Djava.security.egd=file:/dev/./urandom
-      VIRTUAL_HOST: @JENKINS_HOST@
-      VIRTUAL_PORT: 8080
-      LETSENCRYPT_HOST: @JENKINS_HOST@
-      LETSENCRYPT_EMAIL: @LETSENCRYPT_EMAIL@
-    restart: unless-stopped
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "30"
-
-  jenkins_slave:
-    build: ./jenkins_slave
-    image: unguiculus/jenkins-slave:@JENKINS_SLAVE_VERSION@
-    container_name: jenkins-slave
-    networks:
-      - jenkinsnet
-    depends_on:
-      - jenkins_master
-    restart: unless-stopped
-    volumes:
-      - data_slave:/home/jenkins/workspace
-      - $HOME/.gitconfig:/home/jenkins/.gitconfig
-      - /var/run/docker.sock:/var/run/docker.sock
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "30"
-
 volumes:
   conf:
   vhost:
   html:
   certs:
-  data_master:
-  data_slave:
 
 networks:
-  jenkinsnet:
-    driver: bridge
+  ci-net:
+    external: true
+
