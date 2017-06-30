@@ -32,7 +32,6 @@ ENV TERM xterm
 ENV REF_DIR /usr/share/jenkins/ref
 
 # install plugins
-COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 COPY plugins.txt $REF_DIR/plugins.txt
 RUN plugins=$(while read line; do echo -n " $line"; done < $REF_DIR/plugins.txt) && \
     /usr/local/bin/install-plugins.sh $plugins
