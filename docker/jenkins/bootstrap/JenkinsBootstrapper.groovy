@@ -246,8 +246,6 @@ class JenkinsBootstrapper {
 
         CLI.get().setEnabled(false)
 
-        GlobalConfiguration.all().get(GlobalJobDslSecurityConfiguration.class).configure(null, new JSONObject())
-
         instance.save()
     }
 
