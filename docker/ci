@@ -103,8 +103,8 @@ function destroy() {
 }
 
 function main() {
-    local scriptdir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-    pushd $scriptdir > /dev/null
+    local scriptdir=$(dirname "$(readlink -f "$0")")
+    pushd "$scriptdir" > /dev/null
 
     local dirs
     if [[ " ${directories[@]} " =~ " $1 " ]]; then

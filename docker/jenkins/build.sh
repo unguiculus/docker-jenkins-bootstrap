@@ -5,8 +5,8 @@ set -u
 set -o pipefail
 
 function main() {
-    local scriptdir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-    pushd $scriptdir > /dev/null
+    local scriptdir=$(dirname "$(readlink -f "$0")")
+    pushd "$scriptdir" > /dev/null
 
     . ./build.properties
 
@@ -31,4 +31,3 @@ function main() {
 }
 
 main
-

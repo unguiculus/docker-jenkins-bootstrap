@@ -1,7 +1,7 @@
 #!/usr/bin/env bash -e
 
-scriptdir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-pushd $scriptdir > /dev/null
+scriptdir=$(dirname "$(readlink -f "$0")")
+pushd "$scriptdir" > /dev/null
 
 ci_ip=$(../terraform/tf output -no-color ip_address)
 

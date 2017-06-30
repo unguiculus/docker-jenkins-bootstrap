@@ -4,8 +4,8 @@ set -e
 set -u
 
 function main() {
-    local scriptdir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-    pushd $scriptdir > /dev/null
+    local scriptdir=$(dirname "$(readlink -f "$0")")
+    pushd "$scriptdir" > /dev/null
 
     echo 'Copying bootstrap files...'
     local target_dir=./data/bootstrap/

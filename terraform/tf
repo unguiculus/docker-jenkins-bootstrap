@@ -12,8 +12,8 @@ Usage: ${0##*/} <options> <terraform args>
 EOF
 }
 
-scriptdir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-pushd $scriptdir > /dev/null
+scriptdir=$(dirname "$(readlink -f "$0")")
+pushd "$scriptdir" > /dev/null
 
 init=
 
@@ -62,7 +62,7 @@ while :; do
     path=${path%/*}
 done
 
-[[ -n $init ]] && terraform init
+[[ -n "$init" ]] && terraform init
 
 terraform "$@"
 
