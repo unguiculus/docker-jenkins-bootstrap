@@ -8,8 +8,6 @@ function main() {
     local scriptdir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
     pushd $scriptdir > /dev/null
 
-    echo 'Building Jenkins images...'
-
     . ./build.properties
 
     echo "JENKINS_MASTER_VERSION: $JENKINS_MASTER_VERSION"
