@@ -9,6 +9,27 @@
     line: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
     regexp: "^github\\.com"
 
+- name: Configure Git
+  become: yes
+  become_user: jenkins
+  git_config:
+    name: "{{ item.name }}"
+    scope: global
+    value: "{{ item.value }}"
+  with_items:
+    - name: user.name
+      value: Jenkins CI
+    - name: user.email
+      value: jenkins@unguiculus.io
+    - name: alias.st
+      value: status
+    - name: alias.co
+      value: checkout
+    - name: alias.l
+      value: log --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ci) %C(bold blue)<%an>%Creset"
+    - name: alias.rhu
+      value: reset --hard @{u}
+
 - name: Clone Git repo
   become: yes
   become_user: jenkins
