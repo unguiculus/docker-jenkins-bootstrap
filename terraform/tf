@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
+set -u
 
 show_help() {
 cat << EOF
@@ -16,9 +17,10 @@ scriptdir=$(dirname "$(readlink -f "$0")")
 pushd "$scriptdir" > /dev/null
 
 init=
+verbose=
 
 while :; do
-    case $1 in
+    case ${1:-} in
         -h|--help)
             show_help
             exit
