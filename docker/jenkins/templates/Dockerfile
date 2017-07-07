@@ -40,5 +40,4 @@ RUN plugins=$(while read line; do echo -n " $line"; done < $REF_DIR/plugins.txt)
 COPY ./init.groovy.d/bootstrap.groovy $REF_DIR/init.groovy.d/bootstrap.groovy
 
 # copy init lib for bootstrapping
-COPY ./init.lib $REF_DIR
-
+COPY ./init.lib $REF_DIR/init.lib/
