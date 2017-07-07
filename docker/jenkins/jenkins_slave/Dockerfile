@@ -19,16 +19,8 @@ RUN DEBIAN_FRONTEND=noninteractive && \
 RUN sed -i 's|session    required     pam_loginuid.so|session    optional     pam_loginuid.so|g' /etc/pam.d/sshd
 RUN mkdir -p /var/run/sshd
 
-ARG user=jenkins
-ARG group=jenkins
-ARG uid=1000
-ARG gid=1000
-
-# Jenkins is run with user `jenkins`, uid = 1000
-# If you bind mount a volume from the host or a data container,
-# ensure you use the same uid
-RUN groupadd -g ${gid} ${group} && \
-    useradd -u ${uid} -g ${gid} -m -s /bin/bash ${user}
+RUN groupadd -g 1000 jenkins && \
+    useradd -u 1000 -g 1000 -m -s /bin/bash jenkins
 
 # Set password for the jenkins user
 RUN echo "jenkins:jenkins" | chpasswd
@@ -51,7 +43,7 @@ ENV TERM xterm
 
 ENV WORKSPACE /home/jenkins/workspace
 RUN mkdir $WORKSPACE && \
-    chown -R ${user}:${group} $WORKSPACE
+    chown -R jenkins:jenkins $WORKSPACE
 
 RUN DEBIAN_FRONTEND=noninteractive && \
     apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D && \
@@ -90,11 +82,11 @@ RUN DEBIAN_FRONTEND=noninteractive && \
     rm -rf /var/cache/oracle-jdk8-installer && \
     rm -rf /var/lib/apt/lists/*
 
-RUN MAVEN_VERSION=3.3.9 && \
+RUN MAVEN_VERSION=3.5.0 && \
     wget http://mirror.netcologne.de/apache.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
-    echo "516923b3955b6035ba6b0a5b031fbd8b  apache-maven-$MAVEN_VERSION-bin.tar.gz" > maven.md5 && \
+    echo "35c39251d2af99b6624d40d801f6ff02  apache-maven-$MAVEN_VERSION-bin.tar.gz" > maven.md5 && \
     md5sum --check maven.md5 && \
     rm -f maven.md5 && \
     tar xfz apache-maven-$MAVEN_VERSION-bin.tar.gz -C /usr/local && \
     rm -f apache-maven-$MAVEN_VERSION-bin.tar.gz && \
-    ln -s /usr/local/apache-maven-$MAVEN_VERSION /usr/local/apache-maven-latest
+    ln -s /usr/local/apache-maven-$MAVEN_VERSION/bin/mvn /usr/local/bin/mvn

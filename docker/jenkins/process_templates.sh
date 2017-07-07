@@ -8,7 +8,7 @@ function main() {
     local scriptdir=$(dirname "$(readlink -f "$0")")
     pushd "$scriptdir" > /dev/null
 
-    . ./build.properties
+    . ./templates.env
 
     echo "JENKINS_MASTER_VERSION: $JENKINS_MASTER_VERSION"
     echo "JENKINS_SLAVE_VERSION: $JENKINS_SLAVE_VERSION"

@@ -23,7 +23,7 @@ RUN DEBIAN_FRONTEND=noninteractive && \
     locale-gen && \
     update-locale LANG=en_US.UTF-8
 
-USER ${user}
+USER jenkins
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
@@ -37,4 +37,8 @@ RUN plugins=$(while read line; do echo -n " $line"; done < $REF_DIR/plugins.txt)
     /usr/local/bin/install-plugins.sh $plugins
 
 # copy init script for bootstrapping
-COPY ./init/bootstrap.groovy $REF_DIR/init.groovy.d/bootstrap.groovy
+COPY ./init.groovy.d/bootstrap.groovy $REF_DIR/init.groovy.d/bootstrap.groovy
+
+# copy init lib for bootstrapping
+COPY ./init.lib $REF_DIR
+

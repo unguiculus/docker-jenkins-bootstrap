@@ -44,14 +44,9 @@
   become_user: jenkins
   copy:
     src: files/
-    dest: "{{ repo_dir }}/docker/jenkins/bootstrap"
+    dest: "{{ repo_dir }}/docker/jenkins/data/bootstrap"
 
 - name: Process Jenkins templates
   become: yes
   become_user: jenkins
-  shell: "{{ repo_dir }}/docker/jenkins/build.sh"
-
-- name: Jenkins init config
-  become: yes
-  become_user: jenkins
-  shell: "{{ repo_dir }}/docker/jenkins/init.sh"
+  shell: "{{ repo_dir }}/docker/jenkins/process_templates.sh"

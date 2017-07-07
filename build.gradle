@@ -14,8 +14,8 @@ repositories {
 sourceSets {
     main {
         groovy {
-            srcDirs 'docker/jenkins_master/init'
-            srcDirs 'docker/bootstrap'
+            srcDirs 'docker/jenkins/jenkins_master/init.groovy.d'
+            srcDirs 'docker/jenkins/jenkins_master/init.lib'
         }
     }
 }

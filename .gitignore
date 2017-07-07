@@ -2,8 +2,6 @@
 .gradle
 .asciidoctor
 .DS_Store
-/docker/jenkins/bootstrap/*
-!/docker/jenkins/bootstrap/JenkinsBootstrapper.groovy
 /docker/jenkins/data/bootstrap/*
 !/docker/jenkins/data/bootstrap/.gitkeep
 /docker/jenkins/docker-compose.yml
@@ -11,3 +9,4 @@
 terraform.tfstate*
 digitalocean.token
 /ansible/*.retry
+/build
