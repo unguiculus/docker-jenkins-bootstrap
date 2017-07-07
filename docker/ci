@@ -6,7 +6,7 @@ directories=(nginx jenkins)
 
 function show_help() {
     cat << EOF
-Usage: ${0##*/} (start|stop|restart|destroy|pull|build|init) [<directory>] [<args>]
+Usage: ${0##*/} (start|stop|restart|destroy|pull|build) [<directory>] [<args>]
     -h, --help             Display help
 EOF
 }
@@ -33,7 +33,7 @@ function compose() {
     local args=()
 
     while :; do
-        case $1 in
+        case ${1:-} in
             --)
                 shift
                 break
@@ -64,15 +64,6 @@ function build() {
     fi
 
     compose "build" "--" "$@"
-}
-
-function init() {
-    local dir="$1"
-
-    if [[ -f "$dir/init.sh" ]]; then
-        echo "Initializing..."
-        "$dir/init.sh"
-    fi
 }
 
 function up() {
