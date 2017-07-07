@@ -1,0 +1,16 @@
+---
+- name: "[{{ directory }}] Remove potentially existing service"
+  docker_service:
+    project_src: "{{ directory }}"
+    state: absent
+
+- name: "[{{ directory }}] Build service"
+  docker_service:
+    project_src: "{{ directory }}"
+    build: yes
+    state: absent
+
+- name: "[{{ directory }}] Start service"
+  docker_service:
+    project_src: "{{ directory }}"
+    state: present

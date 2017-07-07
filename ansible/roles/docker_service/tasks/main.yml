@@ -4,12 +4,12 @@
     name: ci-net
     state: present
 
-- name: "Run Docker service"
-  docker_service:
-    project_src: "{{ repo_dir }}/docker/{{ item }}"
-    timeout: 300
-    state: present
-    restarted: true
+- name: Run SonarQube service
+  become: yes
+  become_user: jenkins
+  include: docker.yml
+  vars:
+    directory: "{{ repo_dir }}/docker/{{ item }}"
   with_items:
     - jenkins
     - nginx
@@ -17,4 +17,4 @@
 - name: Remove unencrypted config files
   become: yes
   become_user: jenkins
-  shell: "find {{ repo_dir }}/docker/jenkins/bootstrap/ -not -name bootstrap -not -name JenkinsBootstrapper.groovy -delete"
+  shell: "find {{ repo_dir }}/docker/jenkins/data/bootstrap/ -not -name bootstrap -delete"
