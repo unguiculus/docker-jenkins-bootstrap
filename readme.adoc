@@ -1,6 +1,0 @@
-= docker-jenkins-bootstrap
-
-Bootstraps a dockerized Jenkins master/slave setup.
-
-Work in progress...
-

@@ -1,0 +1,9 @@
+= docker-jenkins-bootstrap
+
+Bootstraps a dockerized Jenkins master/slave setup using Terraform, Ansible,
+Docker Compose, Nginx, Let's Encrypt.
+
+Work in progress...
+
+[link=http://www.apache.org/licenses/LICENSE-2.0.html]
+image::http://img.shields.io/:license-apache--2.0-blue.svg?style=flat[]
