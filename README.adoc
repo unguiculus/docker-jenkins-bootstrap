@@ -1,9 +1,33 @@
 = docker-jenkins-bootstrap
+:note-caption: :bulb:
 
 Bootstraps a dockerized Jenkins master/slave setup using Terraform, Ansible,
 Docker Compose, Nginx, Let's Encrypt.
 
-Work in progress...
+. Create a Digital Ocean Droplet with Terraform
++
+----
+./terraform/tf --init apply
+----
++
+The file `digitalocean.token` containing a Digital Ocean API token must be present in the `terraform`
+directory or the repo root.
 
+. Provision Droplet and start Jenkins with Ansible
++
+----
+./ansible/playbook --ask-vault-pass
+----
++
+The password for Ansible Vault is `s3cr3t`. Files in `ansible/roles/docker_config/files` are encrypted.
+
+'''
+
+NOTE: *A note for Mac users:* +
+Shell scripts use `readlink` with the `-f` parameter. This parameter is not supported by the
+Mac version of `readlink`. You must install https://www.gnu.org/software/coreutils/coreutils.html[coreutils]
+and put that first on the `PATH`.
+
+'''
 [link=http://www.apache.org/licenses/LICENSE-2.0.html]
 image::http://img.shields.io/:license-apache--2.0-blue.svg?style=flat[]
