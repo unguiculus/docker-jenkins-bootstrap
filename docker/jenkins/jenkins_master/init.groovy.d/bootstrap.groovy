@@ -32,7 +32,7 @@ if (!Files.exists(bootstrapConfig)) {
 
     println 'Deleting bootstrap files...'
     bootstrapDir.eachFile { Path p ->
-        //Files.delete(p)
+        Files.delete(p)
     }
 
 }

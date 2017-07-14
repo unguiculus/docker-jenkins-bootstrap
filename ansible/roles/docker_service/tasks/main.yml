@@ -4,7 +4,7 @@
     name: ci-net
     state: present
 
-- name: Run SonarQube service
+- name: Run Jenkins service
   become: yes
   become_user: jenkins
   include: docker.yml
@@ -13,8 +13,3 @@
   with_items:
     - jenkins
     - nginx
-
-- name: Remove unencrypted config files
-  become: yes
-  become_user: jenkins
-  shell: "find {{ repo_dir }}/docker/jenkins/data/bootstrap/ -not -name bootstrap -delete"
