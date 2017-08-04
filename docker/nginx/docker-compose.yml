@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   nginx:
-    image: nginx:1.12
+    image: nginx:1.13.3
     container_name: nginx-proxy
     networks:
       - ci-net
@@ -15,7 +15,7 @@ services:
       - html:/usr/share/nginx/html
       - certs:/etc/nginx/certs:ro
     labels:
-      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true"
+      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
     restart: unless-stopped
     logging:
       options:
@@ -53,6 +53,7 @@ services:
       - dockergen
     environment:
       NGINX_DOCKER_GEN_CONTAINER: nginx-proxy-gen
+      DEBUG: "true"
     volumes:
       - conf:/etc/nginx/conf.d
       - vhost:/etc/nginx/vhost.d
