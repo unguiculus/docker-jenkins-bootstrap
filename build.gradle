@@ -29,7 +29,8 @@ dependencies {
     compile 'org.jenkins-ci.plugins:ssh-slaves:1.17@jar'
     compile 'org.jenkins-ci.plugins:plain-credentials:1.4@jar'
     compile 'org.jenkins-ci.plugins:config-file-provider:2.15.7@jar'
-    compile 'org.jenkins-ci.plugins:git:3.3.0@jar'
+    compile 'org.jenkins-ci.plugins:git:3.4.1@jar'
+    compile 'org.jenkins-ci.plugins:pipeline-maven:2.5.0@jar'
     compile 'org.jenkins-ci.plugins:sonar:2.6.1@jar'
     compile 'org.jenkins-ci.plugins:crowd2:1.8@jar'
     compile 'org.jenkins-ci.plugins:job-dsl-core:1.61'
@@ -37,4 +38,7 @@ dependencies {
     compile 'org.jenkins-ci.plugins:antisamy-markup-formatter:1.5@jar'
     compile 'org.jvnet.hudson.plugins:hipchat:2.1.1@jar'
     compile 'org.jvnet.hudson.plugins:locale:1.2@jar'
+    compile 'org.jenkins-ci.plugins.workflow:workflow-cps-global-lib:2.8@jar'
+    compile 'org.jenkins-ci.plugins:scm-api:2.2.0@jar'
+    compile 'org.jenkins-ci.plugins:cloudbees-bitbucket-branch-source:2.2.3@jar'
 }

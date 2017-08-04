@@ -15,6 +15,7 @@ class HipChatConfigAction extends ConfigAction {
         hipChatNotifier.setCredentialId(config.credentialId)
         hipChatNotifier.setRoom(config.room)
         hipChatNotifier.setSendAs(config.sendAs)
+        hipChatNotifier.setV2Enabled(true)
         hipChatNotifier.save()
     }
 }
