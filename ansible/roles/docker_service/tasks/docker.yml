@@ -1,4 +1,10 @@
 ---
+- name: "[{{ directory }}] Build Docker images"
+  # Workaround for https://github.com/ansible/ansible/issues/23607
+  shell: docker-compose build
+  args:
+    chdir: "{{ directory }}"
+
 - name: "[{{ directory }}] Remove potentially existing service"
   docker_service:
     project_src: "{{ directory }}"
