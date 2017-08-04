@@ -11,3 +11,4 @@ digitalocean.token
 /ansible/*.retry
 /build
 /out
+.terraform
