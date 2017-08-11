@@ -15,7 +15,7 @@ class SlaveConfigAction extends ConfigAction {
     @Override
     void execute() {
         Slave slave = new DumbSlave(config.name, config.description, config.remoteRootDir, config.numExecutors,
-            Node.Mode.NORMAL, null, new SSHLauncher(config.hostName, 22, config.sshKeyId, null, null, null, null,
+            Node.Mode.NORMAL, null, new SSHLauncher(config.hostName, 22, config.credentialsId, null, null, null, null,
             null, null, null, new NonVerifyingKeyVerificationStrategy()), new RetentionStrategy.Always())
         def instance = Jenkins.getInstance()
         instance.addNode(slave)
