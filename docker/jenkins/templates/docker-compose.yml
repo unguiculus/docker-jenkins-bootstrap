@@ -3,7 +3,7 @@ version: '3.1'
 services:
   jenkins_master:
     build: ./jenkins_master
-    image: unguiculus/jenkins-master:@JENKINS_MASTER_VERSION@
+    image: unguiculus/jenkins-master:@MASTER_IMAGE_VERSION@
     container_name: jenkins-master
     networks:
       - ci-net
@@ -27,7 +27,7 @@ services:
 
   jenkins_slave:
     build: ./jenkins_slave
-    image: unguiculus/jenkins-slave:@JENKINS_SLAVE_VERSION@
+    image: unguiculus/jenkins-slave:@SLAVE_IMAGE_VERSION@
     container_name: jenkins-slave
     networks:
       - ci-net
