@@ -4,7 +4,7 @@
 Bootstraps a dockerized Jenkins master/slave setup using Terraform, Ansible,
 Docker Compose, Nginx, Let's Encrypt.
 
-. Create a Digital Ocean Droplet with Terraform
+. Create a Digital Ocean Droplet and DNS setup with Terraform. Requires Digital Oceans nameservers to be configured with the domain registrar.
 +
 ----
 ./terraform/tf --init apply
@@ -19,7 +19,7 @@ directory or the repo root.
 ./ansible/playbook --ask-vault-pass
 ----
 +
-The password for Ansible Vault is `s3cr3t`. Files in `ansible/roles/docker_config/files` are encrypted.
+The password for Ansible Vault is `s3cr3t`. Files containing secrets in `ansible/roles/docker_config/files` are encrypted.
 
 '''
 
