@@ -4,7 +4,7 @@ set -e
 set -u
 set -o pipefail
 
-function main() {
+main() {
     local scriptdir=$(dirname "$(readlink -f "$0")")
     pushd "$scriptdir" > /dev/null
 
