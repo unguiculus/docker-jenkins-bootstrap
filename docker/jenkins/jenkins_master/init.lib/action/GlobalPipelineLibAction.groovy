@@ -2,6 +2,7 @@ package action
 
 import groovy.transform.InheritConstructors
 import jenkins.plugins.git.GitSCMSource
+import jenkins.plugins.git.traits.BranchDiscoveryTrait
 import jenkins.scm.api.SCMSource
 import org.jenkinsci.plugins.workflow.libs.GlobalLibraries
 import org.jenkinsci.plugins.workflow.libs.LibraryConfiguration
