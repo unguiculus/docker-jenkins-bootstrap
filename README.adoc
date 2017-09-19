@@ -2,7 +2,7 @@
 :note-caption: :bulb:
 
 Bootstraps a dockerized Jenkins master/slave setup using Terraform, Ansible,
-Docker Compose, Nginx, Let's Encrypt.
+Docker Compose, Nginx, Let's Encrypt. Jenkins is completely configured with Groovy init scripts and Job DSL.
 
 . Create a Digital Ocean Droplet and DNS setup with Terraform. Requires Digital Oceans nameservers to be configured with the domain registrar.
 +
