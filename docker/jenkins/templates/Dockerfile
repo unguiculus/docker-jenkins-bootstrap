@@ -33,8 +33,7 @@ ENV REF_DIR /usr/share/jenkins/ref
 
 # install plugins
 COPY plugins.txt $REF_DIR/plugins.txt
-RUN plugins=$(while read line; do echo -n " $line"; done < $REF_DIR/plugins.txt) && \
-    /usr/local/bin/install-plugins.sh $plugins
+RUN /usr/local/bin/install-plugins.sh < $REF_DIR/plugins.txt
 
 # copy init script for bootstrapping
 COPY ./init.groovy.d/bootstrap.groovy $REF_DIR/init.groovy.d/bootstrap.groovy
