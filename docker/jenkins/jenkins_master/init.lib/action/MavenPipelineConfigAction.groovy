@@ -11,7 +11,7 @@ class MavenPipelineConfigAction extends ConfigAction {
     @Override
     void execute() {
         def mavenPublishers = MavenPublisher.buildPublishersList([], new StreamTaskListener(System.out)).findAll {
-            disabledPublishers.contains(it.getClass().getName())
+            config.disabledPublishers.contains(it.getClass().getName())
         }.collect {
             it.setDisabled(true)
             return it
