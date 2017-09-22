@@ -6,7 +6,7 @@ directories=(nginx jenkins)
 
 function show_help() {
     cat << EOF
-Usage: ${0##*/} (start|stop|restart|destroy|pull|build) [<directory>] [<args>]
+Usage: ${0##*/} [<directory>] (start|stop|restart|destroy|pull|build) [<args>]
     -h, --help             Display help
 EOF
 }
@@ -15,7 +15,7 @@ function parse_cmd_args() {
     local args=()
 
     while :; do
-        case $1 in
+        case "${1:-}" in
             --)
                 shift
                 break
@@ -33,7 +33,7 @@ function compose() {
     local args=()
 
     while :; do
-        case ${1:-} in
+        case "${1:-}" in
             --)
                 shift
                 break
