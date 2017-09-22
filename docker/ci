@@ -4,14 +4,14 @@ set -e
 
 directories=(nginx jenkins)
 
-function show_help() {
+show_help() {
     cat << EOF
 Usage: ${0##*/} [<directory>] (start|stop|restart|destroy|pull|build) [<args>]
     -h, --help             Display help
 EOF
 }
 
-function parse_cmd_args() {
+parse_cmd_args() {
     local args=()
 
     while :; do
@@ -29,7 +29,7 @@ function parse_cmd_args() {
     done
 }
 
-function compose() {
+compose() {
     local args=()
 
     while :; do
@@ -55,7 +55,7 @@ function compose() {
     popd > /dev/null
 }
 
-function build() {
+build() {
     local dir="$1"
 
     if [[ -f "$dir/build.sh" ]]; then
@@ -66,34 +66,34 @@ function build() {
     compose "build" "--" "$@"
 }
 
-function up() {
+up() {
     compose "up" "-d" "--" "$@"
 }
 
-function start() {
+start() {
     compose "start" "--" "$@"
 }
 
-function stop() {
+stop() {
     compose "stop" "--" "$@"
 }
 
-function restart() {
+restart() {
     compose "restart" "--" "$@"
 }
 
-function pull() {
+pull() {
     compose "pull" "--" "$@"
 }
 
-function destroy() {
+destroy() {
     compose "kill" "--" "$@"
     compose "rm" "-f" "--" "$@"
 
     docker network rm ci-net
 }
 
-function main() {
+main() {
     local scriptdir=$(dirname "$(readlink -f "$0")")
     pushd "$scriptdir" > /dev/null
 
