@@ -16,7 +16,7 @@ class MavenSettingsConfigAction extends ConfigAction {
     void execute() {
         String settingsFileName = config.settingsFile
         String settingsFile = bootstrapDir.resolve(settingsFileName).getText(StandardCharsets.UTF_8.name())
-        List<ServerCredentialMapping> credentialMappings = config.credentialMappings.collect { k, v ->
+        List<ServerCredentialMapping> credentialMappings = config.credentialMappings?.collect { k, v ->
             return new ServerCredentialMapping(k, v)
         }
 
