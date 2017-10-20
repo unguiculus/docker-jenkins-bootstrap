@@ -35,7 +35,6 @@
     - role: angstwad.docker_ubuntu
       docker_group_members:
         - jenkins
-      pip_version_docker_compose: 1.15.0
       tags:
         - docker
 
