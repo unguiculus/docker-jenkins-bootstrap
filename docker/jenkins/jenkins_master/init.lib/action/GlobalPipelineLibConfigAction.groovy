@@ -9,7 +9,7 @@ import org.jenkinsci.plugins.workflow.libs.LibraryConfiguration
 import org.jenkinsci.plugins.workflow.libs.SCMSourceRetriever
 
 @InheritConstructors
-class GlobalPipelineLibAction extends ConfigAction {
+class GlobalPipelineLibConfigAction extends ConfigAction {
 
     @Override
     void execute() {

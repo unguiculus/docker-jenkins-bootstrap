@@ -6,7 +6,7 @@ import groovy.transform.InheritConstructors
 import jenkins.model.Jenkins
 
 @InheritConstructors
-class BitbucketAction extends ConfigAction {
+class BitbucketConfigAction extends ConfigAction {
 
     @Override
     void execute() {
