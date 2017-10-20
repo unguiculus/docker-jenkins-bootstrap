@@ -7,7 +7,7 @@
 - name: Run Jenkins service
   become: yes
   become_user: jenkins
-  include: docker.yml
+  include_tasks: docker.yml
   vars:
     directory: "{{ repo_dir }}/docker/{{ item }}"
   with_items:
