@@ -13,14 +13,14 @@ class GlobalPipelineLibConfigAction extends ConfigAction {
 
     @Override
     void execute() {
-        SCMSource scmSource = new GitSCMSource(repo)
-        scmSource.setCredentialsId(credentialId)
+        SCMSource scmSource = new GitSCMSource(config.repo)
+        scmSource.setCredentialsId(config.credentialId)
         scmSource.getTraits().add(new BranchDiscoveryTrait())
         SCMSourceRetriever sourceRetriever = new SCMSourceRetriever(scmSource)
-        LibraryConfiguration libConfig = new LibraryConfiguration(name, sourceRetriever)
-        libConfig.setAllowVersionOverride(allowVersionOverride)
-        libConfig.setImplicit(implicit)
-        libConfig.setDefaultVersion(defaultVersion)
+        LibraryConfiguration libConfig = new LibraryConfiguration(config.name, sourceRetriever)
+        libConfig.setAllowVersionOverride(config.allowVersionOverride)
+        libConfig.setImplicit(config.implicit)
+        libConfig.setDefaultVersion(config.defaultVersion)
 
         def globalLibraries = GlobalLibraries.get()
         globalLibraries.setLibraries([libConfig])

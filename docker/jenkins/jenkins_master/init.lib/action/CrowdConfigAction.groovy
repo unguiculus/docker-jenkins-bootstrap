@@ -11,8 +11,8 @@ class CrowdConfigAction extends ConfigAction {
     void execute() {
         def instance = Jenkins.getInstance()
 
-        def crowdRealm = new CrowdSecurityRealm(config.crowdUrl, config.crowdApplication, config.crowdPassword,
-            config.crowdGroup, false, 2, false, null, null, false, null, null, null, null, null, null, null);
+        def crowdRealm = new CrowdSecurityRealm(config.url, config.application, config.password,
+            config.group, false, 2, false, null, null, false, null, null, null, null, null, null, null);
         instance.setSecurityRealm(crowdRealm)
 
         instance.save()

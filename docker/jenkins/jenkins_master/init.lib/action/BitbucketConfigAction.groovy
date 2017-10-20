@@ -12,7 +12,7 @@ class BitbucketConfigAction extends ConfigAction {
     void execute() {
         def instance = Jenkins.getInstance()
 
-        BitbucketCloudEndpoint endpoint = new BitbucketCloudEndpoint(true, credentialId)
+        BitbucketCloudEndpoint endpoint = new BitbucketCloudEndpoint(true, config.credentialId)
         BitbucketEndpointConfiguration endpointConfig = instance.getDescriptorByType(BitbucketEndpointConfiguration)
         endpointConfig.updateEndpoint(endpoint)
         endpointConfig.save()
