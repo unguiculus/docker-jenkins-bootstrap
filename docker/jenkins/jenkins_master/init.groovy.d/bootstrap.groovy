@@ -23,7 +23,7 @@ if (!Files.exists(bootstrapConfig)) {
     def slurper = new JsonSlurper()
     def json = slurper.parse(bootstrapConfig.toFile(), 'UTF-8')
 
-    def bootstrapperClassFile = Paths.get(System.getenv('JENKINS_HOME'), 'init.lib')
+    def bootstrapperClassFile = Paths.get('/usr/local/lib/jenkins_bootstrap/init.lib')
     def gcl = new GroovyClassLoader(getClass().getClassLoader())
     gcl.addURL(bootstrapperClassFile.toUri().toURL())
     def bootstrapperClass = gcl.loadClass('JenkinsBootstrapper')

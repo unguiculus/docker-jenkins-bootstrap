@@ -39,4 +39,4 @@ RUN /usr/local/bin/install-plugins.sh < $REF_DIR/plugins.txt
 COPY ./init.groovy.d/bootstrap.groovy $REF_DIR/init.groovy.d/bootstrap.groovy
 
 # copy init lib for bootstrapping
-COPY ./init.lib $REF_DIR/init.lib/
+COPY ./init.lib /usr/local/lib/jenkins_bootstrap/init.lib/
