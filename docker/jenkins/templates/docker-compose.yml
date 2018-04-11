@@ -1,10 +1,10 @@
 version: '3.6'
 
 services:
-  jenkins_master:
+  master:
     image: unguiculus/jenkins-master-@JENKINS_VERSION@:@MASTER_BUILD_NUMBER@
     build:
-      context: ./jenkins_master
+      context: ./master
     container_name: jenkins-master
     networks:
       - ci-net
@@ -26,18 +26,18 @@ services:
         max-size: "10m"
         max-file: "30"
 
-  jenkins_slave:
-    image: unguiculus/jenkins-slave:@SLAVE_IMAGE_VERSION@
+  agent:
+    image: unguiculus/jenkins-agent:@AGENT_IMAGE_VERSION@
     build:
-      context: ./jenkins_slave
-    container_name: jenkins-slave
+      context: ./agent
+    container_name: jenkins-agent
     networks:
       - ci-net
     depends_on:
-      - jenkins_master
+      - master
     restart: unless-stopped
     volumes:
-      - data_slave:/home/jenkins/workspace
+      - data_agent:/home/jenkins/workspace
       - $HOME/.gitconfig:/home/jenkins/.gitconfig
       - /var/run/docker.sock:/var/run/docker.sock
     logging:
@@ -47,7 +47,7 @@ services:
 
 volumes:
   data_master:
-  data_slave:
+  data_agent:
 
 networks:
   ci-net:

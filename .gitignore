@@ -4,7 +4,7 @@
 .DS_Store
 /docker/jenkins/data/
 /docker/jenkins/docker-compose.yml
-/docker/jenkins/jenkins_master/Dockerfile
+/docker/jenkins/master/Dockerfile
 terraform.tfstate*
 digitalocean.token
 /ansible/*.retry

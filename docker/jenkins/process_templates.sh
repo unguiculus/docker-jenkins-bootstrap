@@ -14,7 +14,7 @@ main() {
 
     echo "JENKINS_VERSION: $JENKINS_VERSION"
     echo "MASTER_BUILD_NUMBER: $MASTER_BUILD_NUMBER"
-    echo "SLAVE_IMAGE_VERSION: $SLAVE_IMAGE_VERSION"
+    echo "AGENT_IMAGE_VERSION: $AGENT_IMAGE_VERSION"
     echo "JENKINS_HOST: $JENKINS_HOST"
     echo "LETSENCRYPT_EMAIL: $LETSENCRYPT_EMAIL"
 
@@ -22,14 +22,14 @@ main() {
 
     sed "s/@MASTER_BUILD_NUMBER@/$MASTER_BUILD_NUMBER/g" ./templates/docker-compose.yml \
         | sed "s/@JENKINS_VERSION@/$JENKINS_VERSION/g" \
-        | sed "s/@SLAVE_IMAGE_VERSION@/$SLAVE_IMAGE_VERSION/g" \
+        | sed "s/@AGENT_IMAGE_VERSION@/$AGENT_IMAGE_VERSION/g" \
         | sed "s/@JENKINS_HOST@/$JENKINS_HOST/g" \
         | sed "s/@LETSENCRYPT_EMAIL@/$LETSENCRYPT_EMAIL/g" \
         > docker-compose.yml
 
-    echo 'Generating jenkins_master/Dockerfile from template: ./templates/Dockerfile'
+    echo 'Generating master/Dockerfile from template: ./templates/Dockerfile'
 
-    sed "s/@JENKINS_VERSION@/$JENKINS_VERSION/g" ./templates/Dockerfile > jenkins_master/Dockerfile
+    sed "s/@JENKINS_VERSION@/$JENKINS_VERSION/g" ./templates/Dockerfile > master/Dockerfile
 
     popd > /dev/null
 }

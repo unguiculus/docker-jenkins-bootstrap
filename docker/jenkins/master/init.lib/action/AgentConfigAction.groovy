@@ -9,7 +9,7 @@ import hudson.slaves.DumbSlave
 import jenkins.model.Jenkins
 
 @InheritConstructors
-class SlaveConfigAction extends ConfigAction {
+class AgentConfigAction extends ConfigAction {
 
     @Override
     void execute() {
@@ -23,12 +23,12 @@ class SlaveConfigAction extends ConfigAction {
         ComputerLauncher launcher = new SSHLauncher(hostName, 22, credentialsId, null, null, null, null, null, null,
             null, new NonVerifyingKeyVerificationStrategy())
 
-        Slave slave = new DumbSlave(name, remoteRootDir, launcher)
-        slave.setNodeDescription(description)
-        slave.setNumExecutors(numExecutors)
+        Slave agent = new DumbSlave(name, remoteRootDir, launcher)
+        agent.setNodeDescription(description)
+        agent.setNumExecutors(numExecutors)
 
         def instance = Jenkins.get()
-        instance.addNode(slave)
+        instance.addNode(agent)
         instance.save()
     }
 }
