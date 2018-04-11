@@ -17,7 +17,7 @@ class SecurityConfigAction extends ConfigAction {
 
     @Override
     void execute() {
-        def instance = Jenkins.getInstance()
+        def instance = Jenkins.get()
 
         def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
         strategy.setAllowAnonymousRead(false)

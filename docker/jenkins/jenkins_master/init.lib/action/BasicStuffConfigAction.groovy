@@ -8,7 +8,7 @@ class BasicStuffConfigAction extends ConfigAction {
 
     @Override
     void execute() {
-        def instance = Jenkins.getInstance()
+        def instance = Jenkins.get()
 
         instance.setNumExecutors(0)
         instance.setNoUsageStatistics(true)

@@ -11,7 +11,7 @@ class JavaConfigAction extends ConfigAction {
     void execute() {
         config.each { String name, String javaHome ->
             JDK jdk = new JDK(name, javaHome)
-            def descriptor = Jenkins.getInstance().getDescriptorByType(JDK.DescriptorImpl)
+            def descriptor = Jenkins.get().getDescriptorByType(JDK.DescriptorImpl)
             descriptor.setInstallations(jdk)
             descriptor.save()
         }

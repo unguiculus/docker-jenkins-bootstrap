@@ -10,7 +10,7 @@ class BitbucketConfigAction extends ConfigAction {
 
     @Override
     void execute() {
-        def instance = Jenkins.getInstance()
+        def instance = Jenkins.get()
 
         BitbucketCloudEndpoint endpoint = new BitbucketCloudEndpoint(true, config.credentialId)
         BitbucketEndpointConfiguration endpointConfig = instance.getDescriptorByType(BitbucketEndpointConfiguration)

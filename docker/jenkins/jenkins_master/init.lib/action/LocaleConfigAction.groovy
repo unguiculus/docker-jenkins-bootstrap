@@ -10,7 +10,7 @@ class LocaleConfigAction extends ConfigAction {
 
     @Override
     void execute() {
-        def instance = Jenkins.getInstance()
+        def instance = Jenkins.get()
         def localePlugin = instance.getPlugin(PluginImpl)
         JSONObject json = new JSONObject()
         json.put('systemLocale', config.systemLocale)

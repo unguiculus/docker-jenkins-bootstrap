@@ -1,5 +1,4 @@
 FROM jenkins/jenkins:@JENKINS_VERSION@
-ENV JENKINS_VERSION @JENKINS_VERSION@
 
 LABEL maintainer="unguiculus"
 

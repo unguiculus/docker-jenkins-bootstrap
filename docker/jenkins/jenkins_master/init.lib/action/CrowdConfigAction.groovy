@@ -9,7 +9,7 @@ class CrowdConfigAction extends ConfigAction {
 
     @Override
     void execute() {
-        def instance = Jenkins.getInstance()
+        def instance = Jenkins.get()
 
         def crowdRealm = new CrowdSecurityRealm(config.url, config.application, config.password,
             config.group, false, 2, false, null, null, false, null, null, null, null, null, null, null);

@@ -27,7 +27,7 @@ class SlaveConfigAction extends ConfigAction {
         slave.setNodeDescription(description)
         slave.setNumExecutors(numExecutors)
 
-        def instance = Jenkins.getInstance()
+        def instance = Jenkins.get()
         instance.addNode(slave)
         instance.save()
     }

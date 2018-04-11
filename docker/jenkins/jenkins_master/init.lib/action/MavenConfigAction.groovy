@@ -9,7 +9,7 @@ class MavenConfigAction extends ConfigAction {
 
     @Override
     void execute() {
-        def instance = Jenkins.getInstance()
+        def instance = Jenkins.get()
         def mavenTask = instance.getDescriptorByType(Maven.DescriptorImpl)
         mavenTask.setInstallations(new Maven.MavenInstallation(config.name, config.mavenHome, []))
         mavenTask.save()

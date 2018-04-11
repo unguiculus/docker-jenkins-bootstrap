@@ -9,7 +9,7 @@ class HipChatConfigAction extends ConfigAction {
 
     @Override
     void execute() {
-        def instance = Jenkins.getInstance()
+        def instance = Jenkins.get()
         HipChatNotifier.DescriptorImpl hipChatNotifier = instance.getDescriptorByType(HipChatNotifier.DescriptorImpl)
         hipChatNotifier.setServer(config.server)
         hipChatNotifier.setCredentialId(config.credentialId)

@@ -12,7 +12,7 @@ class SonarQubeConfigAction extends ConfigAction {
 
     @Override
     void execute() {
-        def instance = Jenkins.getInstance()
+        def instance = Jenkins.get()
 
         SonarGlobalConfiguration sonar = instance.getDescriptorByType(SonarGlobalConfiguration)
         sonar.setBuildWrapperEnabled(true)

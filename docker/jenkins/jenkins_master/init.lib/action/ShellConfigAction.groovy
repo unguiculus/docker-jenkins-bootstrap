@@ -9,7 +9,7 @@ class ShellConfigAction extends ConfigAction {
 
     @Override
     void execute() {
-        def instance = Jenkins.getInstance()
+        def instance = Jenkins.get()
         def shell = instance.getDescriptorByType(Shell.DescriptorImpl)
         shell.setShell(config)
         shell.save()

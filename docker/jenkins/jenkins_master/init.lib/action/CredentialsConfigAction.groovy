@@ -58,7 +58,7 @@ class CredentialsConfigAction extends ConfigAction {
                     throw new IllegalStateException("Unknown credentials type: ${localConfig.type}")
             }
 
-            def creds = CredentialsProvider.lookupCredentials(cred.class, Jenkins.getInstance(), ACL.SYSTEM, [])
+            def creds = CredentialsProvider.lookupCredentials(cred.class, Jenkins.get(), ACL.SYSTEM, [])
             def oldCred = creds.findResult { it.id == cred.id ? it : null }
 
             if (oldCred) {

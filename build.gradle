@@ -5,7 +5,7 @@
 apply plugin: 'groovy'
 
 repositories {
-    jcenter()
+    mavenCentral()
     maven {
         url 'http://repo.jenkins-ci.org/releases/'
     }
@@ -22,23 +22,23 @@ sourceSets {
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.7'
-    compile 'org.jenkins-ci.main:jenkins-war:2.73.2'
-    compile 'org.jenkins-ci.plugins:timestamper:1.8.8@jar'
-    compile 'org.jenkins-ci.plugins:credentials:2.1.13@jar'
+    compile 'org.jenkins-ci.main:jenkins-war:2.107.2'
+    compile 'org.jenkins-ci.plugins:timestamper:1.8.9@jar'
+    compile 'org.jenkins-ci.plugins:credentials:2.1.16@jar'
     compile 'org.jenkins-ci.plugins:ssh-credentials:1.13@jar'
-    compile 'org.jenkins-ci.plugins:ssh-slaves:1.22@jar'
+    compile 'org.jenkins-ci.plugins:ssh-slaves:1.26@jar'
     compile 'org.jenkins-ci.plugins:plain-credentials:1.4@jar'
-    compile 'org.jenkins-ci.plugins:config-file-provider:2.16.4@jar'
-    compile 'org.jenkins-ci.plugins:git:3.6.0@jar'
-    compile 'org.jenkins-ci.plugins:pipeline-maven:3.0.1@jar'
-    compile 'org.jenkins-ci.plugins:sonar:2.6.1@jar'
+    compile 'org.jenkins-ci.plugins:config-file-provider:2.18@jar'
+    compile 'org.jenkins-ci.plugins:git:3.8.0@jar'
+    compile 'org.jenkins-ci.plugins:pipeline-maven:3.5.1@jar'
+    compile 'org.jenkins-ci.plugins:sonar:2.7.1@jar'
     compile 'org.jenkins-ci.plugins:crowd2:1.8@jar'
-    compile 'org.jenkins-ci.plugins:job-dsl-core:1.66'
-    compile 'org.jenkins-ci.plugins:job-dsl:1.66@jar'
+    compile 'org.jenkins-ci.plugins:job-dsl-core:1.68'
+    compile 'org.jenkins-ci.plugins:job-dsl:1.68@jar'
     compile 'org.jenkins-ci.plugins:antisamy-markup-formatter:1.5@jar'
     compile 'org.jvnet.hudson.plugins:hipchat:2.1.1@jar'
     compile 'org.jvnet.hudson.plugins:locale:1.2@jar'
     compile 'org.jenkins-ci.plugins.workflow:workflow-cps-global-lib:2.9@jar'
-    compile 'org.jenkins-ci.plugins:scm-api:2.2.3@jar'
-    compile 'org.jenkins-ci.plugins:cloudbees-bitbucket-branch-source:2.2.3@jar'
+    compile 'org.jenkins-ci.plugins:scm-api:2.2.6@jar'
+    compile 'org.jenkins-ci.plugins:cloudbees-bitbucket-branch-source:2.2.10@jar'
 }
