@@ -1,7 +1,6 @@
 ansicolor
 antisamy-markup-formatter
 blueocean
-build-name-setter
 cloudbees-bitbucket-branch-source
 cloudbees-folder
 config-file-provider
@@ -9,13 +8,10 @@ copyartifact
 create-fingerprint
 credentials
 credentials-binding
-cron_column
-description-setter
 disk-usage
 docker-commons
 docker-custom-build-environment
 docker-workflow
-doclinks
 downstream-buildview
 email-ext
 envinject
@@ -27,8 +23,6 @@ github-branch-source
 gradle
 groovy
 hipchat
-htmlpublisher
-javadoc
 job-dsl
 lockable-resources
 locale
@@ -39,10 +33,8 @@ pipeline-maven
 pipeline-utility-steps
 plain-credentials
 port-allocator
-postbuild-task
 rebuild
 role-strategy
-run-condition
 sonar
 ssh-agent
 ssh-credentials

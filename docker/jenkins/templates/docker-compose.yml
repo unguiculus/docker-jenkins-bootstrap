@@ -1,9 +1,10 @@
-version: '3.1'
+version: '3.6'
 
 services:
   jenkins_master:
-    build: ./jenkins_master
-    image: unguiculus/jenkins-master:@MASTER_IMAGE_VERSION@
+    image: unguiculus/jenkins-master-@JENKINS_VERSION@:@MASTER_BUILD_NUMBER@
+    build:
+      context: ./jenkins_master
     container_name: jenkins-master
     networks:
       - ci-net
@@ -26,8 +27,9 @@ services:
         max-file: "30"
 
   jenkins_slave:
-    build: ./jenkins_slave
     image: unguiculus/jenkins-slave:@SLAVE_IMAGE_VERSION@
+    build:
+      context: ./jenkins_slave
     container_name: jenkins-slave
     networks:
       - ci-net

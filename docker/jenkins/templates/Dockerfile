@@ -1,7 +1,7 @@
 FROM jenkins/jenkins:@JENKINS_VERSION@
 ENV JENKINS_VERSION @JENKINS_VERSION@
 
-MAINTAINER unguiculus
+LABEL maintainer="unguiculus"
 
 USER root
 
@@ -40,3 +40,7 @@ COPY ./init.groovy.d/bootstrap.groovy $REF_DIR/init.groovy.d/bootstrap.groovy
 
 # copy init lib for bootstrapping
 COPY ./init.lib /usr/local/lib/jenkins_bootstrap/init.lib/
+
+# Disable install and plugin wizard
+RUN echo @JENKINS_VERSION@ > /usr/share/jenkins/ref/jenkins.install.UpgradeWizard.state
+RUN echo @JENKINS_VERSION@ > /usr/share/jenkins/ref/jenkins.install.InstallUtil.lastExecVersion

@@ -1,6 +1,6 @@
 FROM ubuntu:xenial
 
-MAINTAINER unguiculus
+LABEL maintainer="unguiculus"
 
 # Install a basic SSH server
 RUN DEBIAN_FRONTEND=noninteractive && \
@@ -69,29 +69,21 @@ RUN DEBIAN_FRONTEND=noninteractive && \
     gpasswd -a jenkins docker
 
 # Install Docker Compose and Bash completion for Docker Compose
-RUN curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
+RUN curl -L https://github.com/docker/compose/releases/download/1.20.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     curl -L https://raw.githubusercontent.com/docker/compose/$(docker-compose version --short)/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
 
-# Temporary fix for Oracle JDK installer
-RUN DEBIAN_FRONTEND=noninteractive && \
-    echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee /etc/apt/sources.list.d/webupd8team-java.list && \
+RUN echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" | tee /etc/apt/sources.list.d/webupd8team-java.list && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886 && \
     apt-get update && \
     echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
-    apt-get install -y oracle-java8-installer || true && \
-    cd /var/lib/dpkg/info/ && \
-    sed -i 's|JAVA_VERSION=8u144|JAVA_VERSION=8u152|' oracle-java8-installer.* && \
-    sed -i 's|PARTNER_URL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/|PARTNER_URL=http://download.oracle.com/otn-pub/java/jdk/8u152-b16/aa0333dd3019491ca4f6ddbe78cdb6d0/|' oracle-java8-installer.* && \
-    sed -i 's|SHA256SUM_TGZ="e8a341ce566f32c3d06f6d0f0eeea9a0f434f538d22af949ae58bc86f2eeaae4"|SHA256SUM_TGZ="218b3b340c3f6d05d940b817d0270dfe0cfd657a636bad074dcabe0c111961bf"|' oracle-java8-installer.* && \
-    sed -i 's|J_DIR=jdk1.8.0_144|J_DIR=jdk1.8.0_152|' oracle-java8-installer.* && \
     apt-get install -y oracle-java8-installer && \
     rm -rf /var/cache/oracle-jdk8-installer && \
     rm -rf /var/lib/apt/lists/*
 
-RUN MAVEN_VERSION=3.5.0 && \
+RUN MAVEN_VERSION=3.5.3 && \
     wget http://mirror.netcologne.de/apache.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
-    echo "35c39251d2af99b6624d40d801f6ff02  apache-maven-$MAVEN_VERSION-bin.tar.gz" > maven.md5 && \
+    echo "51025855d5a7456fc1a67666fbef29de  apache-maven-$MAVEN_VERSION-bin.tar.gz" > maven.md5 && \
     md5sum --check maven.md5 && \
     rm -f maven.md5 && \
     tar xfz apache-maven-$MAVEN_VERSION-bin.tar.gz -C /usr/local && \
