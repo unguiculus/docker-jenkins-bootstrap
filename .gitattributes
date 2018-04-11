@@ -1,1 +1,4 @@
 *.sh text eol=lf
+ansible/roles/docker_config/files/bootstrap.json filter=git-crypt diff=git-crypt
+ansible/roles/docker_config/files/id_rsa_sample filter=git-crypt diff=git-crypt
+ansible/roles/docker_config/files/secret_file.yaml filter=git-crypt diff=git-crypt

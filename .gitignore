@@ -2,8 +2,7 @@
 .gradle
 .asciidoctor
 .DS_Store
-/docker/jenkins/data/bootstrap/*
-!/docker/jenkins/data/bootstrap/.gitkeep
+/docker/jenkins/data/
 /docker/jenkins/docker-compose.yml
 /docker/jenkins/jenkins_master/Dockerfile
 terraform.tfstate*
