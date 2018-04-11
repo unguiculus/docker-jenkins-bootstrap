@@ -1,11 +1,19 @@
 = docker-jenkins-bootstrap
 :note-caption: :bulb:
 
-Bootstraps a dockerized Jenkins master/slave setup using Terraform, Ansible,
-Docker Compose, Nginx, Let's Encrypt. Jenkins is completely configured with Groovy init scripts and Job DSL.
+Bootstraps a dockerized Jenkins master/slave setup on Goocle Cloud Platform using Terraform, Ansible,
+Docker Compose, Træfik, Let's Encrypt. Jenkins is completely configured with Groovy init scripts and Job DSL.
 
-Secret files are encrypted with https://github.com/AGWA/git-crypt[git-crypt] using a shared key. For this sample repo, the
-key file (`git-crypt.key`) is committed to Git, something you should not to for real-world stuff. You may use `git-crypt` via Docker container with the script
+== Prerequisites
+
+* https://www.terraform.io[Terraform]
+* https://www.ansible.com[Ansible]
+* https://github.com/AGWA/git-crypt[git-crypt]
+* https://stedolan.github.io/jq/[jq]
+
+Secret files are encrypted with https://github.com/AGWA/git-crypt[git-crypt] using a shared key. For this sample repo,
+the key file (`git-crypt.key`) is committed to Git, something you should not to for real-world stuff. You may use
+`git-crypt` via Docker container with the script
 https://github.com/unguiculus/docker-jenkins-bootstrap/blob/master/git-script.sh[git-script.sh].
 
 ----
@@ -13,24 +21,71 @@ https://github.com/unguiculus/docker-jenkins-bootstrap/blob/master/git-script.sh
 ./git-crypt.sh lock
 ----
 
-Before you run scripts, make sure you unlock the repo in order to decrypt files. Files containing secrets in `ansible/roles/docker_config/files` are encrypted.
+Before you run scripts, make sure you unlock the repo in order to decrypt files. Files containing secrets in
+`ansible/roles/docker_config/files` are encrypted.
 
+Create a Google service account key and store it as `account.json` in the repo root.
 
-. *Create a Digital Ocean Droplet and DNS setup with Terraform. Requires Digital Oceans nameservers to be configured with the domain registrar.*
-+
+== Terraform
+
+Terraform is used to provision a GCP instance and the DNS setup. Once Google's name servers are assigned to the DNS zone,
+they must be configured with the domain registrar. The setup is split up into `network` and `compute`. This
+allows the instance can be destroyed and recreated without touching network resources. This is important
+because recreating the DNS managed zone most certainly assignes a different set of name servers which would require
+reconfiguring name servers with the domain registrar.
+
+The wrapper script `terraform/tf` is used to run Terraform.
+
 ----
-./terraform/tf --init apply
+ ./tf --help
+Usage: tf <options> <terraform args>
+    -h, --help             Display help
+    -v, --verbose          Display verbose output
+    -i, --init             Run 'terraform init' before executing the actual command
+    -d, --directory        The directory to run Terraform in (must be relative to this script)
+    --                     End of all options
 ----
-+
-The file `digitalocean.token` containing a Digital Ocean API token must be present in the `terraform`
-directory or the repo root.
 
-. *Provision Droplet and start Jenkins with Ansible*
-+
+=== State
+
+Terraform state is stored in a GCS bucket which needs to be created before any network and compute resources so their
+state can be stored in this bucket.
+
+----
+./terraform/tf --directory base --init apply
+----
+
+=== Network
+
+Creates a static IP address and the DNS managed zone. To keep things simple, the default network is used.
+
+----
+./terraform/tf --directory network --init apply
+----
+
+=== Compute
+
+Creates a VM instance, firewall rules, and an A record for the Jenkins subdomain.
+
+----
+./terraform/tf --directory compute --init apply
+----
+
+== Ansible
+
+Ansible is used to install everything that's needed to run Jenkins and also spins up Jenkins and Træfik using
+Docker Compose. Before running Ansible make sure you have the SSH key added to the SSH agent.
+
+----
+ssh-add ~/.ssh/google_compute_engine
+----
+
+The wrapper script for Ansible reads the IP address of the Jenkins instance from the Tarraform state and passes it
+as an extra var.
+
 ----
 ./ansible/playbook
 ----
-+
 
 
 '''

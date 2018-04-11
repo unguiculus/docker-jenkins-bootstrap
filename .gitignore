@@ -6,7 +6,7 @@
 /docker/jenkins/docker-compose.yml
 /docker/jenkins/master/Dockerfile
 terraform.tfstate*
-digitalocean.token
+account.json
 /ansible/*.retry
 /build
 /out

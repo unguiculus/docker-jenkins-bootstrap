@@ -1,11 +1,10 @@
-#!/usr/bin/env bash -e
+#!/usr/bin/env bash -ex
 
 scriptdir=$(dirname "$(readlink -f "$0")")
 pushd "$scriptdir" > /dev/null
 
-ci_ip=$(../terraform/tf output -no-color ip_address)
+jenkins_ip=$(../terraform/tf -d network output -no-color ip_address)
 
-# we need an increased timeout, the droplet might not be completely ready yet
-ansible-playbook main.yml -i hosts --extra-vars "ci_ip=$ci_ip" --timeout=60 "$@"
+ansible-playbook main.yml -i hosts --extra-vars "jenkins_ip=$jenkins_ip" --extra-vars "host_key_checking=False" "$@"
 
 popd > /dev/null

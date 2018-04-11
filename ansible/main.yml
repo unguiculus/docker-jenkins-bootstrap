@@ -1,22 +1,7 @@
 ---
 - hosts: jenkins
-  remote_user: root
-  gather_facts: False
-
-  vars_prompt:
-    - name: ci_ip
-      prompt: "Enter IP address of Jenkins host"
-
-  tasks:
-    - name: Set IP as fact
-      set_fact:
-        jenkins_ip: "{{ ci_ip }}"
-    - name: Install Python
-      raw: "apt-get update && apt-get -y -q install python"
-
-- hosts: jenkins
-
-  remote_user: root
+  become: True
+  become_method: sudo
   gather_facts: True
 
   roles:
@@ -24,17 +9,9 @@
       tags:
         - basic
 
-    - role: firewall
-      tags:
-        - firewall
-
-    - role: jenkins_user
-      tags:
-        - user
-
     - role: angstwad.docker_ubuntu
       docker_group_members:
-        - jenkins
+        - ubuntu
       tags:
         - docker
 

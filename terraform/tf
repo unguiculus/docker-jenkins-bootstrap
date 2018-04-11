@@ -9,15 +9,20 @@ Usage: ${0##*/} <options> <terraform args>
     -h, --help             Display help
     -v, --verbose          Display verbose output
     -i, --init             Run 'terraform init' before executing the actual command
+    -d, --directory        The directory to run Terraform in (must be relative to this script)
     --                     End of all options
 EOF
 }
 
-scriptdir=$(dirname "$(readlink -f "$0")")
-pushd "$scriptdir" > /dev/null
+readonly SCRIPTDIR=$(dirname "$(readlink -f "$0")")
+readonly GOOGLE_APPLICATION_CREDENTIALS="$SCRIPTDIR/account.json"
+
+export TF_VAR_project=spielwiese-168815
+export TF_VAR_remote_state_bucket=jenkins-tf-state
 
 init=
 verbose=
+directory=
 
 while :; do
     case ${1:-} in
@@ -30,6 +35,15 @@ while :; do
             ;;
         -i|--init)
             init=true
+            ;;
+        -d|--directory)
+            if [ -n "$2" ]; then
+                directory="$2"
+                shift
+            else
+                echo "ERROR: '-d|--directory' cannot be empty." >&2
+                exit 1
+            fi
             ;;
         --) # End of all options.
             shift
@@ -46,25 +60,24 @@ while :; do
     shift
 done
 
+if [[ -z "$directory" ]]; then
+    echo "ERROR: '-d|--directory' is required" >&2
+    exit 1
+fi
+
+if [[ ! -d "$SCRIPTDIR/$directory" ]]; then
+    echo "ERROR: Folder '$SCRIPTDIR/$directory' doesn't exist" >&2
+    exit 1
+fi
+
 [[ -n "$verbose" ]] && set -x
 
-export TF_VAR_region="fra1"
+pushd "$SCRIPTDIR/$directory" > /dev/null
 
-# search account.json up to project root
-path=$(pwd)
-while :; do
-    token="$path/digitalocean.token"
-    if [[ -f "$token" ]]; then
-        export TF_VAR_do_token=$(cat "$token")
-        break
-    elif [[ -d "$path/.git" ]]; then
-        echo "'digitalocean.token' not found in hierarchy" >&2
-        exit 1
-    fi
-    path=${path%/*}
-done
-
-[[ -n "$init" ]] && terraform init
+[[ -n "$init" ]] && terraform init -reconfigure \
+    "-backend-config=project=${TF_VAR_project}" \
+    "-backend-config=bucket=${TF_VAR_remote_state_bucket}" \
+    "-backend-config=prefix=${directory}"
 
 terraform "$@"
 

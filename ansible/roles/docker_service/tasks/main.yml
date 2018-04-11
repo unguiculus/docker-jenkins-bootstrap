@@ -6,10 +6,10 @@
 
 - name: Run Jenkins service
   become: yes
-  become_user: jenkins
+  become_user: ubuntu
   include_tasks: docker.yml
   vars:
     directory: "{{ repo_dir }}/docker/{{ item }}"
   with_items:
     - jenkins
-    - nginx
+    - traefik

@@ -1,7 +1,7 @@
 ---
 - name: Add Github host key
   become: yes
-  become_user: jenkins
+  become_user: ubuntu
   lineinfile:
     dest: "{{ jenkins_user_home }}/.ssh/known_hosts"
     create: yes
@@ -11,7 +11,7 @@
 
 - name: Configure Git
   become: yes
-  become_user: jenkins
+  become_user: ubuntu
   git_config:
     name: "{{ item.name }}"
     scope: global
@@ -32,21 +32,37 @@
 
 - name: Clone Git repo
   become: yes
-  become_user: jenkins
+  become_user: ubuntu
   git:
     dest: "{{ repo_dir }}"
     repo: "{{ git_repo }}"
     force: yes
     version: "{{ branch }}"
 
+- name: Make sure acme.json is present
+  become: yes
+  become_user: ubuntu
+  file:
+    path: "{{ repo_dir }}/docker/traefik/data/acme.json"
+    state: touch
+    mode: 0600
+
+- name: Copy Google key file
+  become: yes
+  become_user: ubuntu
+  copy:
+    src: "../account.json"
+    dest: "{{ repo_dir }}/docker/traefik/data/account.json"
+    mode: 0600
+
 - name: Copy Jenkins config files
   become: yes
-  become_user: jenkins
+  become_user: ubuntu
   copy:
     src: files/
     dest: "{{ repo_dir }}/docker/jenkins/data/bootstrap"
 
 - name: Process Jenkins templates
   become: yes
-  become_user: jenkins
+  become_user: ubuntu
   shell: "{{ repo_dir }}/docker/jenkins/process_templates.sh"
