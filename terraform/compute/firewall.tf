@@ -1,4 +1,4 @@
-resource "google_compute_firewall" "jenkins_inbound" {
+resource "google_compute_firewall" "allow_80_443" {
   name = "ci-inbound-allow-80-443"
   network = "default"
 
@@ -10,22 +10,3 @@ resource "google_compute_firewall" "jenkins_inbound" {
   target_tags = ["jenkins"]
   source_ranges = ["0.0.0.0/0"]
 }
-
-//resource "google_compute_firewall" "jenkins_outbound" {
-//  name = "ci-outbound-allow-all"
-//  network = "default"
-//
-//  allow {
-//    protocol = "tcp"
-//  }
-//
-//  allow {
-//    protocol = "udp"
-//  }
-//
-//  allow {
-//    protocol = "icmp"
-//  }
-//
-//  source_tags = ["jenkins"]
-//}

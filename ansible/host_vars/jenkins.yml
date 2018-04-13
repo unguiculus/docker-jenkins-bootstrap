@@ -1,6 +1,6 @@
 ---
 jenkins_user_home: /home/ubuntu
 git_repo: https://github.com/unguiculus/docker-jenkins-bootstrap.git
-branch: feature/update
+branch: master
 repo_dir: "{{ jenkins_user_home }}/docker-jenkins-bootstrap"
 

@@ -15,7 +15,6 @@ resource "google_compute_instance" "jenkins" {
   network_interface {
     subnetwork = "default"
     access_config {
-      nat_ip = "${data.terraform_remote_state.network.ip_address}"
     }
   }
 }
@@ -25,5 +24,5 @@ resource "google_dns_record_set" "jenkins" {
   type = "A"
   ttl = 300
   managed_zone = "${data.terraform_remote_state.network.dns_managed_zone}"
-  rrdatas = ["${data.terraform_remote_state.network.ip_address}"]
+  rrdatas = ["${google_compute_instance.jenkins.network_interface.0.access_config.0.assigned_nat_ip}"]
 }

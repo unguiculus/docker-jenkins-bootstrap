@@ -1,9 +1,9 @@
-#!/usr/bin/env bash -ex
+#!/usr/bin/env bash -e
 
 scriptdir=$(dirname "$(readlink -f "$0")")
 pushd "$scriptdir" > /dev/null
 
-jenkins_ip=$(../terraform/tf -d network output -no-color ip_address)
+jenkins_ip=$(../terraform/tf -d compute output -no-color ip_address)
 
 ansible-playbook main.yml -i hosts --extra-vars "jenkins_ip=$jenkins_ip" --extra-vars "host_key_checking=False" "$@"
 
