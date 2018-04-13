@@ -6,6 +6,14 @@ services:
     build:
       context: ./master
     container_name: jenkins-master
+    labels:
+      - "traefik.frontend.rule=Host:jenkins.unguiculus.io"
+      - "traefik.backend=master"
+      - "traefik.backend.loadbalancer=wrr"
+      - "traefik.docker.network=ci-net"
+      - "traefik.enable=true"
+      - "traefik.port=8080"
+      - "traefik.default.protocol=http"
     networks:
       - ci-net
     volumes:
@@ -13,13 +21,8 @@ services:
       - ./data/bootstrap:/etc/jenkins_bootstrap
     ports:
       - "8080:8080"
-      - "50000:50000"
     environment:
       JAVA_OPTS: -Djava.security.egd=file:/dev/./urandom
-      VIRTUAL_HOST: @JENKINS_HOST@
-      VIRTUAL_PORT: 8080
-      LETSENCRYPT_HOST: @JENKINS_HOST@
-      LETSENCRYPT_EMAIL: @LETSENCRYPT_EMAIL@
     restart: unless-stopped
     logging:
       options:

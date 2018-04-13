@@ -1,0 +1,30 @@
+version: '3.6'
+
+services:
+  traefik:
+    image: traefik:1.5.4
+    container_name: traefik
+    command: --api --docker
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8081:8080"
+    networks:
+      - ci-net
+    environment:
+      GCE_PROJECT: "spielwiese-168815"
+      GCE_SERVICE_ACCOUNT_FILE: "/account.json"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data/traefik.toml:/traefik.toml
+      - ./data/account.json:/account.json
+      - ./data/acme.json:/acme.json
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "30"
+
+networks:
+  ci-net:
+    external: true

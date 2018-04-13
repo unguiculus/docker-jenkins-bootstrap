@@ -2,7 +2,7 @@
 
 set -e
 
-directories=(nginx jenkins)
+directories=(traefik jenkins)
 
 show_help() {
     cat << EOF

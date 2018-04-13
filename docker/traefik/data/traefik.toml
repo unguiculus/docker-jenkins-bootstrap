@@ -1,0 +1,43 @@
+debug = true
+
+logLevel = "DEBUG"
+defaultEntryPoints = ["https","http"]
+
+[entryPoints]
+  [entryPoints.http]
+    compress = true
+    [entryPoints.http.tls]
+      minVersion = "VersionTLS12"
+      cipherSuites = [
+        "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+        "TLS_RSA_WITH_AES_256_GCM_SHA384"
+       ]
+  address = ":80"
+    [entryPoints.http.redirect]
+      entryPoint = "https"
+  [entryPoints.https]
+    address = ":443"
+  [entryPoints.https.tls]
+
+[accessLog]
+
+[retry]
+
+[docker]
+  endpoint = "unix:///var/run/docker.sock"
+  domain = "unguiculus.io"
+  watch = true
+  exposedbydefault = false
+
+[acme]
+  email = "unguiculus@gmail.com"
+  storage = "/acme.json"
+  entryPoint = "https"
+  acmeLogging = true
+
+  [[acme.domains]]
+    main = "jenkins.unguiculus.io"
+
+  [acme.dnsChallenge]
+    provider = "gcloud"
+    delayBeforeCheck = 0
