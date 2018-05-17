@@ -1,4 +1,7 @@
-#!/usr/bin/env bash -e
+#!/usr/bin/env bash
+
+set -e
+set -u
 
 scriptdir=$(dirname "$(readlink -f "$0")")
 pushd "$scriptdir" > /dev/null
